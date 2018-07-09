@@ -5,6 +5,7 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axios from '../../axios-orders';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -79,8 +80,25 @@ class BurgerBuilder extends Component {
         this.setState({purchasing: false});
     }
 
-    purchaseContinueHandler() {
-        alert("You are being continued. Please wait for a long time as this feature is currently under development.");
+    purchaseContinueHandler = () => {
+        //alert("You are being continued. Please wait for a long time as this feature is currently under development.");
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Test Person',
+                address: {
+                    street: 'Dubai cross street',
+                    zipcode: '23252',
+                    country: 'England'
+                },
+                email: 'test@test.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+        axios.post('/orders.json', order)
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
 
     render() {
